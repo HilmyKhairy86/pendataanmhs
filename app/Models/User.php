@@ -11,6 +11,14 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+    public function Mahasiswa()
+    {
+        return $this->hasOne(Mahasiswa::class, 'user_id');
+    }
+    public function Dosen()
+    {
+        return $this->hasOne(Dosen::class, 'user_id');
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +26,10 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'username',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -45,4 +54,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    
 }
