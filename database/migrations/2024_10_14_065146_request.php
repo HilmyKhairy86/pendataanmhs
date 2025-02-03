@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('kelas_id');
-            $table->foreign('kelas_id')->references('kelas_id')->on('mahasiswa');
+            $table->foreign('kelas_id')->references('id')->on('kelas');
             $table->unsignedBigInteger('mahasiswa_id');
-            $table->foreign('mahasiswa_id')->references('user_id')->on('mahasiswa');
+            $table->foreign('mahasiswa_id')->references('id')->on('mahasiswa');
             $table->text('keterangan');
             $table->boolean('edit')->default(false);
             $table->rememberToken();

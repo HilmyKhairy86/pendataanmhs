@@ -15,28 +15,18 @@ class DataKelasController extends Controller
         $kelas = Kelas::where('id',$kelas->id)->first();
         $mhs = Mahasiswa::where('kelas_id',$kelas->id)->get();
         $dosen = Dosen::where('kelas_id', $kelas->id)->first();
-        // $mhs = $kelas->mahasiswa;
-        // $dosen = $kelas->dosen;
-        // if ($mhs->isEmpty()) {
-        //     $mhs = null;
-        // }
-        // if ($dosen->isEmpty()) {
-        //     $dosen = null;
-        // }
         return view('detailkelas', compact('mhs', 'dosen', 'kelas'));
     }
 
     public function tampilkelas(Kelas $kelas)
     {
         $kelas = Kelas::find($kelas->id);
-        
         return view('tambah', compact('kelas'));
     }
 
     public function passtokelas(Kelas $kelas)
     {
         $kelas = Kelas::find($kelas->id);
-        
         return view('editkelas', compact('kelas'));
     }
 
@@ -53,7 +43,6 @@ class DataKelasController extends Controller
         if ($kelas) {
             $kelas->kelas_id = null;
             $kelas->save();
-
             return redirect()->back()->with('message', 'Kelas removed successfully.');
         } else {
             return redirect()->back()->with('error', 'Mahasiswa not found.');
@@ -82,18 +71,14 @@ class DataKelasController extends Controller
     public function hapuskelas($id) {
         $mhs = mahasiswa::where('kelas_id',$id)->get();
         $dosen = Dosen::where('kelas_id',$id)->first();
-        // dd($dosen->user->role);
-
         if ($mhs) {
             foreach ($mhs as $m) {
                 $m->kelas_id = null;
-                // dd();
                 $m->save();
             }
 
             $record = Kelas::find($id);
             if ($record) {
-                // Delete the record
                 $record->delete();
                 return redirect()->back()->with('message', 'Kelas removed successfully.');
             }
@@ -105,7 +90,6 @@ class DataKelasController extends Controller
             $dosen->user->save();
             $record = Kelas::find($id);
             if ($record) {
-                // Delete the record
                 $record->delete();
                 return redirect()->back()->with('message', 'Kelas removed successfully.');
             }
@@ -119,7 +103,6 @@ class DataKelasController extends Controller
         } else {
             $record = Kelas::find($id);
             if ($record) {
-                // Delete the record
                 $record->delete();
                 return redirect()->back()->with('message', 'Kelas removed successfully.');
             }
@@ -131,11 +114,7 @@ class DataKelasController extends Controller
     public function kelasdosen()
     {
         $user = Auth::user();
-        // $user->id;
-        // dd($user);
-        // $kelas = Kelas::find($kelas);
         $dsn = Dosen::where('user_id',$user->id)->first();
-        // dd($dsn);
         $kelas = Kelas::where('id',$dsn->kelas_id)->first();
 
         $mahasiswa = Mahasiswa::where('kelas_id',$kelas->id)->whereIn('user_id',function($query) use ($kelas){
@@ -145,18 +124,11 @@ class DataKelasController extends Controller
         })->get();
         $dosen = Dosen::where('kelas_id', $kelas->id)->first();
         $allMahasiswa = Mahasiswa::where('kelas_id', $kelas->id)->get();
-
         $mhs = $mahasiswa->merge($allMahasiswa)->unique('user_id');
-
-        // dd($mhs);
-
-
-        // dd($mhs);
         if (!$kelas) {
             return redirect()->back()->with('error', 'Kelas not found');
         }
-
-    return view('detail_kelas', compact('mhs', 'dosen', 'kelas'));
+        return view('detail_kelas', compact('mhs', 'dosen', 'kelas'));
 
     }
 
